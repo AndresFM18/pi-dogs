@@ -21,7 +21,10 @@ const server = require('./src/app.js');
 const { conn } = require('./src/db.js');
 
 // Syncing all the models at once.
-conn.sync({ force: true }).then(() => {
+conn.sync({ alter: true })
+//.then(() => {
+ // conn.query("ALTER SEQUENCE IF EXISTS public.razas_id_seq OWNED BY razas.id; SELECT setval('public.razas_id_seq', 262, true);")})
+.then(() => {
   server.listen(3001, () => {
     console.log('%s listening at 3001'); // eslint-disable-line no-console
   });
