@@ -131,6 +131,57 @@ router.post('/dogs', async function (req, res) {
 
 })
 
+router.post('/dogs2', async function (req, res) {
+
+    const { nombre, peso, temperamento, altura, edad } = req.body;
+    let PesoNumber = Number(peso);
+    let AlturaNumber = Number(altura);
+    let EdadNumber = Number(edad);
+   
+    try {
+        if (typeof nombre != 'string') {
+            return res.send('El nombre deber ser una string')
+        }
+        if (isNaN(PesoNumber)) {
+            return res.send('El peso debe ser un numero')
+        }
+        if (isNaN(AlturaNumber)) {
+            return res.send('La altura debe ser un numero')
+        }
+        if (isNaN(EdadNumber)) {
+            return res.send('La edad debe ser un numero')
+        }
+    } catch (error) {
+        return res.send(error.message)
+    }
+    //Aun falta implementar el include de temperamento
+    try {
+        await Raza.create({
+            nombre: nombre,
+            altura: altura,
+            peso: peso,
+            edad: edad,
+            Temperamento:[{
+                nombre: temperamento
+            }]
+        }, {include:Temperamento})
+
+            .then((creacion) => {
+                if (creacion) {
+                    console.log(creacion)
+                    console.log(temperamento)
+                    return res.send('Se ha creado la Raza correctamente')
+                    
+                } else {
+                    return res.send('No se ha creado la Raza')
+                }
+            })
+    } catch (error) {
+        return res.send(error.message)
+    }
+
+})
+
 router.get('/temperaments', async function (req, res) {
     let limpio = [];
 
