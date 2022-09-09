@@ -180,7 +180,7 @@ function CreateRecipe() {
                         <label> Peso (kg)</label>
                         <input type="text"
                             value={input.peso}
-                            placeholder='Ingrese el peso de su Raza...'
+                            placeholder='Ingrese el pe de su Raza...'
                             onChange={(e) => { pesoValidator(e) }}
                         />
                         <div className="message-error">{errors ? <p>{errors.peso}</p> : null} </div>
