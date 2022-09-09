@@ -2,7 +2,7 @@ const { Router } = require('express');
 const axios = require('axios');
 require("dotenv").config();
 const { API_KEY } = process.env;
-const { Temperamento, Raza } = require('../db');
+const { Temperamento, Raza, Raza_Temp } = require('../db');
 // Importar todos los routers;
 // Ejemplo: const authRouter = require('./auth.js');
 const router = Router();
@@ -10,8 +10,9 @@ const router = Router();
 router.get('/dogs', async function (req, res) {
     const nombre = req.query.nombre;
     let respuesta = [];
+    const existen = await Raza.findByPk(1);
 
-    if (nombre) {
+    if (nombre){
         await axios.get(`https://api.thedogapi.com/v1/breeds/search?q=${nombre}&apiKey=${API_KEY}`)
             .then((response) => { respuesta = response.data })
             .then(() => {
@@ -22,10 +23,26 @@ router.get('/dogs', async function (req, res) {
                     return res.send(arreglo)
                 }
             })
-    } else {
+    }
+   
+    if(existen){
+        await Raza.findAll()
+        .then((razas) => { return res.send(razas) })
+    }else{
         await axios.get(`https://api.thedogapi.com/v1/breeds?apiKey=${API_KEY}`)
-            .then((response) => { respuesta = response.data })
-        return res.send(respuesta)
+        .then((response) => { respuesta = response.data
+            let pipe = respuesta.map((dog)=>{
+                Raza.create({
+                    id:dog.id,
+                    nombre:dog.name,
+                    altura:dog.height.metric,
+                    peso:dog.weight.metric, 
+                    edad:dog.life_span
+
+                })
+            })
+       return res.send(respuesta) })
+
     }
 })
 
@@ -131,57 +148,6 @@ router.post('/dogs', async function (req, res) {
 
 })
 
-router.post('/dogs2', async function (req, res) {
-
-    const { nombre, peso, temperamento, altura, edad } = req.body;
-    let PesoNumber = Number(peso);
-    let AlturaNumber = Number(altura);
-    let EdadNumber = Number(edad);
-   
-    try {
-        if (typeof nombre != 'string') {
-            return res.send('El nombre deber ser una string')
-        }
-        if (isNaN(PesoNumber)) {
-            return res.send('El peso debe ser un numero')
-        }
-        if (isNaN(AlturaNumber)) {
-            return res.send('La altura debe ser un numero')
-        }
-        if (isNaN(EdadNumber)) {
-            return res.send('La edad debe ser un numero')
-        }
-    } catch (error) {
-        return res.send(error.message)
-    }
-    //Aun falta implementar el include de temperamento
-    try {
-        await Raza.create({
-            nombre: nombre,
-            altura: altura,
-            peso: peso,
-            edad: edad,
-            Temperamento:[{
-                nombre: temperamento
-            }]
-        }, {include:Temperamento})
-
-            .then((creacion) => {
-                if (creacion) {
-                    console.log(creacion)
-                    console.log(temperamento)
-                    return res.send('Se ha creado la Raza correctamente')
-                    
-                } else {
-                    return res.send('No se ha creado la Raza')
-                }
-            })
-    } catch (error) {
-        return res.send(error.message)
-    }
-
-})
-
 router.get('/temperaments', async function (req, res) {
     let limpio = [];
 
@@ -198,7 +164,7 @@ router.get('/temperaments', async function (req, res) {
 
                 limpio = result.map((element) => { return element.split(",") })
                 limpio = limpio.flat();
-                limpio = limpio.map((x)=>{return x.trimStart()})
+                limpio = limpio.map((x) => { return x.trimStart() })
                 let dataArr = [...new Set(limpio)];
                 try {
                     dataArr.map((string) => { Temperamento.create({ nombre: string }) })
@@ -211,6 +177,64 @@ router.get('/temperaments', async function (req, res) {
             })
     }
 })
+
+
+router.post("/dogs2", async function (req, res) {
+
+    const { nombre, peso, temperamento, altura, edad } = req.body;
+    // let PesoNumber = Number(peso);
+    // let AlturaNumber = Number(altura);
+    // let EdadNumber = Number(edad);
+    // try {
+    //     if (typeof nombre != 'string') {
+    //         return res.send('El nombre deber ser una string')
+    //     }
+    //     if (isNaN(PesoNumber)) {
+    //         return res.send('El peso debe ser un numero')
+    //     }
+    //     if (isNaN(AlturaNumber)) {
+    //         return res.send('La altura debe ser un numero')
+    //     }
+    //     if (isNaN(EdadNumber)) {
+    //         return res.send('La edad debe ser un numero')
+    //     }
+    // } catch (error) {
+    //     return res.send(error.message)
+    // }
+
+    try {
+
+        const razanew = await Raza.create({
+            nombre: nombre,
+            altura: altura,
+            peso: peso,
+            edad: edad,
+        });
+
+        let tempi = [];
+
+        for(let x = 0; x<temperamento.length; x++){
+            await Temperamento.findAll({
+                where: { nombre: temperamento[x] }})
+                .then((temp)=> {tempi[x]=temp[0].dataValues.id})
+        }
+
+        tempi.map(async (tempid)=> {
+            await Raza_Temp.create({
+                RazaId: razanew.id,
+                TemperamentoId: tempid
+            })
+        })      
+               
+        //let pipe = await Raza.findAll({ include: Temperamento })
+        return res.send('Se ha creado la Raza correctamente')
+    } catch (error) {
+        return console.log(error.message)
+    }
+
+})
+
+
 // Configurar los routers
 // Ejemplo: router.use('/auth', authRouter);
 

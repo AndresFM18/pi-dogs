@@ -15,15 +15,15 @@ module.exports = (sequelize) => {
       allowNull: false
     },
     altura:{
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull:false
     },
     peso:{
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false
     },
     edad:{
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false
     }
 

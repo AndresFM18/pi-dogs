@@ -104,7 +104,7 @@ function CreateRecipe() {
                     edad: input.edad,
                     altura: input.altura,
                     peso: input.peso,
-                    temperamento: input.temperamento.join(', ')
+                    temperamento: input.temperamento
                 })
                 if (res2.data === 'Se ha creado la Raza correctamente') {
                     setInput({
@@ -178,21 +178,21 @@ function CreateRecipe() {
                         />
                         <div className="message-error">{errors ? <p>{errors.nombre}</p> : null} </div>
                         <label> Peso (kg)</label>
-                        <input type="number"
+                        <input type="text"
                             value={input.peso}
                             placeholder='Ingrese el peso de su Raza...'
                             onChange={(e) => { pesoValidator(e) }}
                         />
                         <div className="message-error">{errors ? <p>{errors.peso}</p> : null} </div>
                         <label>Altura (m)</label>
-                        <input type="number"
+                        <input type="text"
                             value={input.altura}
                             placeholder='Ingrese la altura de su Raza'
                             onChange={(e) => { alturaValidator(e) }}
                         />
                         <div className="message-error">{errors ? <p>{errors.altura}</p> : null} </div>
                         <label>Edad</label>
-                        <input type="number"
+                        <input type="text"
                             value={input.edad}
                             placeholder='Introduzca la edad aproximada de su Raza...'
                             onChange={(e) => { edadValidator(e) }}
