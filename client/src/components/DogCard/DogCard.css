@@ -1,0 +1,12 @@
+.container{
+    height: 550px;
+    width: 370px;
+    position: relative;
+   left:500px;
+   border:color #000000;
+   border-width: 1px;
+   border-style: solid;
+}
+
+h3.cursiv {font-family: cursive;}
+p.cursiv {font-family: cursive;}

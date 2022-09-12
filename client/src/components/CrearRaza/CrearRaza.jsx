@@ -15,9 +15,12 @@ function CreateRecipe() {
     const temperaments = useSelector((state) => state.temperament)
     const [input, setInput] = useState({
         nombre: '',
-        peso: '',
-        altura: '',
-        edad: '',
+        peso1: '',
+        peso2: '',
+        altura1: '',
+        altura2: '',
+        edad1: '',
+        edad2: '',
         temperamento: [],
 
     })
@@ -45,35 +48,65 @@ function CreateRecipe() {
         }
     };
 
-    function pesoValidator(e) {
-        setInput({ ...input, peso: e.target.value });
-        if (Numbers.test(e.target.value)) {
-            setErrors({ ...errors, peso: '' })
-        } else {
-            setErrors({ ...errors, peso: 'El peso debe ser un numero' })
-        }
+    function pesoValidator1(e) {
+        setInput({ ...input, peso1: e.target.value });
+        // let pes1 = Number(input.peso1);
+        // let pes2 = Number(input.peso2);
+        // if (pes1 > pes2){
+        //     setErrors({ ...errors, pesot: 'El peso minimo no puede ser mayor que el peso maximo' })
+        // } else {
+        //     setErrors({ ...errors, pesot: '' })
+        // }
+    }
+    function pesoValidator2(e) {
+        setInput({ ...input, peso2: e.target.value });
+        // let pes1 = Number(input.peso1);
+        // let pes2 = Number(input.peso2);
+        // if (pes1 > pes2){
+        //     setErrors({ ...errors, pesot: 'El peso minimo no puede ser mayor que el peso maximo' })
+        // } else {
+        //     setErrors({ ...errors, pesot: '' })
+        // }
     }
 
-    function alturaValidator(e) {
-        setInput({ ...input, altura: e.target.value });
-        if (Numbers.test(e.target.value)) {
-            setErrors({ ...errors, altura: '' })
-        } else {
-            setErrors({ ...errors, altura: 'La altura debe ser un numero' })
-        }
+    function alturaValidator1(e) {
+        setInput({ ...input, altura1: e.target.value });
+        // if (Numbers.test(e.target.value)) {
+        //     setErrors({ ...errors, altura: '' })
+        // } else {
+        //     setErrors({ ...errors, altura: 'La altura debe ser un numero' })
+        // }
     }
 
-    function edadValidator(e) {
-        setInput({ ...input, edad: e.target.value });
-        if (Numbers.test(e.target.value)) {
-            setErrors({ ...errors, edad: '' })
-        } else {
-            setErrors({ ...errors, edad: 'La edad debe ser un numero' })
-        }
+    function alturaValidator2(e) {
+        setInput({ ...input, altura2: e.target.value });
+        // if (Numbers.test(e.target.value)) {
+        //     setErrors({ ...errors, altura: '' })
+        // } else {
+        //     setErrors({ ...errors, altura: 'La altura debe ser un numero' })
+        // }
+    }
+
+
+    function edadValidator1(e) {
+        setInput({ ...input, edad1: e.target.value });
+        // if (Numbers.test(e.target.value)) {
+        //     setErrors({ ...errors, edad: '' })
+        // } else {
+        //     setErrors({ ...errors, edad: 'La edad debe ser un numero' })
+        // }
+    }
+
+    function edadValidator2(e) {
+        setInput({ ...input, edad2: e.target.value });
+        // if (Numbers.test(e.target.value)) {
+        //     setErrors({ ...errors, edad: '' })
+        // } else {
+        //     setErrors({ ...errors, edad: 'La edad debe ser un numero' })
+        // }
     }
     function temperamentosValidator(e) {
         if (e.target.value === "all") {
-            return console.log("xd")
         }
         if (!input.temperamento.includes(e.target.value)) {
             setInput({ ...input, temperamento: [...input.temperamento, e.target.value] })
@@ -87,31 +120,37 @@ function CreateRecipe() {
 
 
     let verdadAbsoluta = (errors) => {
-        if (errors.nombre || errors.peso || errors.altura || errors.edad) {
+        if (errors.nombre || errors.peso1 || errors.altura || errors.edad) {
             return true
         } else { return false }
     }
     let post = async (e) => {
         e.preventDefault();
         try {
-            if (input.nombre === "" && input.edad === "" && input.peso === "" && input.altura === "") {
+            if (input.nombre === "" && input.edad1 === "" && input.edad2 === "" && input.peso1 === "" && input.peso2 === "" && input.altura1 === "" && input.altura2 === "") {
                 return setMessage('Todos los campos estan vacios')
             }
 
             if (input.temperamento[0] !== undefined) {
                 let res2 = await axios.post("http://localhost:3001/dogs2", {
                     nombre: input.nombre,
-                    edad: input.edad,
-                    altura: input.altura,
-                    peso: input.peso,
+                    edad1: input.edad1,
+                    edad2: input.edad2,
+                    altura1: input.altura1,
+                    altura2: input.altura2,
+                    peso1: input.peso1,
+                    peso2: input.peso2,
                     temperamento: input.temperamento
                 })
                 if (res2.data === 'Se ha creado la Raza correctamente') {
                     setInput({
                         nombre: '',
-                        peso: '',
-                        altura: '',
-                        edad: '',
+                        peso1: '',
+                        peso2: '',
+                        altura1: '',
+                        altura2: '',
+                        edad1: '',
+                        edad2: '',
                         temperamento: []
                     })
                     return setMessage("Raza creada2 correctamente");
@@ -125,9 +164,12 @@ function CreateRecipe() {
             }
             let res = await axios.post("http://localhost:3001/dogs", {
                 nombre: input.nombre,
-                edad: input.edad,
-                altura: input.altura,
-                peso: input.peso
+                edad1: input.edad1,
+                edad2: input.edad2,
+                altura1: input.altura1,
+                altura2: input.altura2,
+                peso1: input.peso1,
+                peso2: input.peso2
             });
             if (res.data === "llave duplicada viola restricción de unicidad «razas_nombre_key2»") {
                 return setMessage('Esta raza ya existe');
@@ -135,9 +177,12 @@ function CreateRecipe() {
             if (res.data === 'Se ha creado la Raza correctamente') {
                 setInput({
                     nombre: '',
-                    peso: '',
-                    altura: '',
-                    edad: '',
+                    peso1: '',
+                    peso2: '',
+                    altura1: '',
+                    altura2: '',
+                    edad1: '',
+                    edad2: '',
                     temperamento: []
                 })
                 setMessage("Raza creada correctamente");
@@ -178,24 +223,45 @@ function CreateRecipe() {
                         />
                         <div className="message-error">{errors ? <p>{errors.nombre}</p> : null} </div>
                         <label> Peso (kg)</label>
-                        <input type="text"
-                            value={input.peso}
-                            placeholder='Ingrese el pe de su Raza...'
-                            onChange={(e) => { pesoValidator(e) }}
+
+                        <input type="number"
+                            value={input.peso1}
+                            placeholder='Ingrese el peso minimo de su Raza...'
+                            onChange={(e) => { pesoValidator1(e) }}
                         />
-                        <div className="message-error">{errors ? <p>{errors.peso}</p> : null} </div>
+                        <input type="number"
+                            value={input.peso2}
+                            placeholder='Ingrese el peso maximo de su Raza...'
+                            onChange={(e) => { pesoValidator2(e) }}
+                        />
+
+                        <div className="message-error">{errors.pesot ? <p>{errors.pesot}</p> : null} </div>
                         <label>Altura (m)</label>
-                        <input type="text"
-                            value={input.altura}
-                            placeholder='Ingrese la altura de su Raza'
-                            onChange={(e) => { alturaValidator(e) }}
+
+                        <input type="number"
+                            value={input.altura1}
+                            placeholder='Ingrese la altura minima de su Raza'
+                            onChange={(e) => { alturaValidator1(e) }}
                         />
+
+                        <input type="number"
+                            value={input.altura2}
+                            placeholder='Ingrese la altura maxima de su Raza'
+                            onChange={(e) => { alturaValidator2(e) }}
+                        />
+
                         <div className="message-error">{errors ? <p>{errors.altura}</p> : null} </div>
                         <label>Edad</label>
-                        <input type="text"
-                            value={input.edad}
-                            placeholder='Introduzca la edad aproximada de su Raza...'
-                            onChange={(e) => { edadValidator(e) }}
+
+                        <input type="number"
+                            value={input.edad1}
+                            placeholder='Introduzca la edad minima aproximada de su Raza...'
+                            onChange={(e) => { edadValidator1(e) }}
+                        />
+                        <input type="number"
+                            value={input.edad2}
+                            placeholder='Introduzca la edad minima aproximada de su Raza...'
+                            onChange={(e) => { edadValidator2(e) }}
                         />
 
                         <label>Temperamentos: </label>

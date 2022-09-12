@@ -1,11 +1,11 @@
 .formulario{
   width: 90%;
-  height: auto;
+  height: 5em;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 40px auto;
-  padding-top: 10em;
+  padding-top: 19em;
 }
   .titulo{
     text-align: center;
@@ -89,8 +89,8 @@
 }
 
 .formulario-sugerencias{
-  width: 65%;
-  height: 450px;
+  width: 50%;
+  height: 650px;
   border: 1px solid #2c3e50;
   padding: 20px 40px;
   border-radius: 0 5px 5px 0;
@@ -103,7 +103,7 @@
   margin-bottom: 20px;
 }
 .formulario-sugerencias form label{
-  width: 100%;
+  width: 70%;
   height: 30px;
   font-size: 16px;
 }
