@@ -28,7 +28,7 @@ const Principal = () => {
     const dogs = useSelector((state) => state.dogs)
     const dogSort = useSelector((state)=>state.dogsSort)
     useEffect(() => {
-        dispatch(getPaginatedDogs(id))
+        // dispatch(getPaginatedDogs(id))
     }, [])
 
     return (
@@ -56,8 +56,8 @@ const Principal = () => {
               
             </div>
             <h1>Razas:</h1>
-           
-             {dogSort ? dogSort.map(x => { return <DogCard nombre={x.name} id={x.id} temperamentos={x.temperament} /> }) :dogs.map((x)=>{return <DogCard nombre={x.name} id={x.id} temperamentos={x.temperament} />})}   
+            {dogs ? dogs.map((x)=>{ return <DogCard id={x.id} nombre={x.nombre} altura={x.altura} peso={x.peso} edad={x.edad} temperamentos={x.temperamentos}/>}) : null}
+             {/* {dogSort ? dogSort.map(x => { return <DogCard nombre={x.name} id={x.id} temperamentos={x.temperament} /> }) :dogs.map((x)=>{return <DogCard nombre={x.name} id={x.id} temperamentos={x.temperament} />})}    */}
           
             
             <div className='menu-grande2'>

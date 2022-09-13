@@ -50,28 +50,23 @@ export const getPaginatedDogs = (id) => {
                         nombre: x.nombre,
                         altura: x.altura,
                         peso: x.peso,
-                        edad: x.edad
+                        edad: x.edad,
+                        temperamentos: x.temperamentos
                     })
                 })
             })
 
-            //YA NO ES NECESARIO HACER ESTO PORQUE HAY DEMASIADOS PERROS EN LA DB
-            //AHORA DEBES ARREGLAR LAS RELACIONES EN LA RUTA PRINCIPAL Y RENDERIZAR 
-            //PRIMERO LOS DE LA BASE (LOS DE DESPUES DE 223 Y LUEGO RENDERIZAR lOS DEMAS
-            //NO OLFIDAR EL FILTRO, HAY QUE BUSCAR RENDERIZAR TODO DESDE LA BASE PERO PODIENDO
-            //DIFERENCIAR UNOS DEO TROS 
-console.log(arreglodb.length)
         await axios.get(`http://localhost:3001/apicall/${100 - arreglodb.length}`)
             .then((response) => {
                 var respuesta = response.data
                 respuesta.forEach((x) => {
                     arregloapi.push({
                         id: x.id,
-                        nombre: x.name,
-                        imagen: x.url,
-                        altura: x.height.metric,
-                        peso: x.weight.metric,
-                        temperamentos: x.temperament
+                        nombre: x.nombre,
+                        altura: x.altura,
+                        peso: x.peso,
+                        edad: x.edad,
+                        temperamentos: x.temperamentos
                     })
 
                 })

@@ -1,4 +1,4 @@
-import {GET_TEMPERAMENTS, GET_DOGS, GET_DOGS_ID,ALPHABETIC_ORDER, GET_PAGINATED_DOGS,SEARCH_BAR} from '../actions';
+import {GET_TEMPERAMENTS, GET_DOGS_ID,ALPHABETIC_ORDER, GET_PAGINATED_DOGS,SEARCH_BAR} from '../actions';
 
 const initialState = {
     dogs:[],

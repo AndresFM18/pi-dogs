@@ -3,6 +3,7 @@ const axios = require('axios');
 require("dotenv").config();
 const { API_KEY } = process.env;
 const { Temperamento, Raza, Raza_Temp } = require('../db');
+const {Op} = require('sequelize')
 // Importar todos los routers;
 // Ejemplo: const authRouter = require('./auth.js');
 const router = Router();
@@ -26,25 +27,61 @@ router.get('/dogs', async function (req, res) {
     }
 
     if (existen) {
-        await Raza.findAll()
+        try {
+             await Raza.findAll({include: Temperamento})
             .then((razas) => { return res.send(razas) })
+        } catch (error) {
+          console.log(error.message)  
+        }
+       
     } else {
-        await axios.get(`https://api.thedogapi.com/v1/breeds?apiKey=${API_KEY}`)
-            .then((response) => {
-                respuesta = response.data
-                let pipe = respuesta.map((dog) => {
-                    Raza.create({
-                        id: dog.id,
-                        nombre: dog.name,
-                        altura: dog.height.metric,
-                        peso: dog.weight.metric,
-                        edad: dog.life_span
 
+        try {
+            await axios.get(`https://api.thedogapi.com/v1/breeds?apiKey=${API_KEY}`)
+            .then(async (response) => {
+                respuesta = response.data
+                respaldo = respuesta
+                
+
+                for (let i = 0; i < respuesta.length; i++) {
+                  let razanew =  await Raza.create({
+                    id: respuesta[i].id,
+                    nombre: respuesta[i].name,
+                    altura: respuesta[i].height.metric,
+                    peso: respuesta[i].weight.metric,
+                    edad: respuesta[i].life_span
+                  })
+                  var desorden = respuesta[i].temperament
+                  if(desorden === undefined){
+                    desorden = 'NOTEMPERAMENTS'
+                  }
+                  var orden = desorden.split(",");
+                  orden = orden.map((x)=>{return x.trim()})
+                  //console.log(orden)
+                  let tempi = [];
+
+                  for (let x = 0; x < orden.length; x++) {
+                       await Temperamento.findAll({
+                          where: { nombre: orden[x] }
+                      })
+                        .then((temp) => { tempi[x] = temp[0].dataValues.id })
+                       
+                  }
+
+                  tempi.map(async (tempid) => {
+                    await Raza_Temp.create({
+                        razaId: razanew.id,
+                        temperamentoId: tempid
                     })
                 })
-                return res.send(respuesta)
+                }
+                return res.send(respaldo)
             })
 
+        } catch (error) {
+            console.log(error.message)
+        }
+       
     }
 })
 
@@ -74,31 +111,30 @@ router.get('/dogs/:id', async function (req, res) {
             return res.send(error.message)
         }
     }
-    if (Number_id > 252) {
         try {
             await Raza.findByPk(Number_id, {
                 include: Temperamento,
             })
                 .then((razad) => {
                     if (razad == null) {
-                        return res.send('No existe en la base')
+                        return res.send('No existe')
                     }
                     return res.send(razad);
                 })
         } catch (error) {
             return res.send(error.message);
         }
-    } else {
-        await axios.get(`https://api.thedogapi.com/v1/breeds`)
-            .then((response) => { respuesta = response.data })
-            .then(() => {
-                let arreglo = respuesta.filter(x => x.id == id)
-                if (arreglo[0] == undefined) {
-                    return res.send('este id no existe')
-                }
-                return res.send(arreglo)
-            })
-    }
+    //  else {
+    //     await axios.get(`https://api.thedogapi.com/v1/breeds`)
+    //         .then((response) => { respuesta = response.data })
+    //         .then(() => {
+    //             let arreglo = respuesta.filter(x => x.id == id)
+    //             if (arreglo[0] == undefined) {
+    //                 return res.send('este id no existe')
+    //             }
+    //             return res.send(arreglo)
+    //         })
+    // }
 
 
 
@@ -254,7 +290,7 @@ router.post("/dogs2", async function (req, res) {
 
 router.get('/database', async function (req, res) {
     try {
-        await Raza.findAll()
+        await Raza.findAll({where:{id :{[Op.gt]: 264,}} , include: Temperamento})
             .then((razas) => { return res.send(razas) })
     } catch (error) {
         return res.send(error.message)
@@ -266,9 +302,9 @@ router.get('/apicall/:length', async function (req, res) {
    
     
     try {
-        await axios.get(`https://api.thedogapi.com/v1/breeds?limit=${length}&apiKey=${API_KEY}`)
+        await Raza.findAll({where:{id:{[Op.lte]:length}},include: Temperamento})
             .then((response) => {
-                return res.send(response.data)
+                return res.send(response)
             })
     } catch (error) {
         return res.send(error.message)
