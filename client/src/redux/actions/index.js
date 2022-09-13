@@ -6,6 +6,8 @@ export const GET_DOGS_ID = 'GET_DOGS_ID'
 export const GET_PAGINATED_DOGS = 'GET_PAGINATED_DOGS'
 export const ALPHABETIC_ORDER = 'ALPHABETIC_ORDER'
 export const SEARCH_BAR = 'SEARCH_BAR'
+export const GET_FROM = 'GET_FROM'
+export const GET_TEMPERAMENT_FILTER = 'GET_TEMPERAMENT_FILTER'
 
 export const getAllTemperaments = () => {
     return async (dispatch) => {
@@ -52,8 +54,8 @@ export const getPaginatedDogs = (id) => {
                         peso: x.peso,
                         edad: x.edad,
                         temperamentos: x.temperamentos,
-                        imagen:"NoIMG"
-                        
+                        imagen: x.imagen
+
                     })
                 })
             })
@@ -99,15 +101,55 @@ export const alphabeticOrder = (array) => {
     }
 }
 
-export const searchBar = (nombre,array) => {
+export const searchBar = (nombre, array) => {
     return async (dispatch) => {
-        await axios.get(`http://localhost:3001/dogs?nombre=${nombre}`)
+        await axios.get(`http://localhost:3001/dogs?nombres=${nombre}`)
             .then((response) => {
                 var respuesta = response.data
-                if(typeof respuesta === "string"){
-                    return dispatch({ type:SEARCH_BAR, payload:array})
+                if (typeof respuesta === "string") {
+                    return dispatch({ type: SEARCH_BAR, payload: array })
                 }
                 dispatch({ type: SEARCH_BAR, payload: respuesta })
             })
     }
+}
+export const getFrom = (string, id) => {
+    if (string === "Database") {
+      
+                return async (dispatch) => {
+            await axios.get('http://localhost:3001/database')
+                .then((response) => {
+                    var respuesta = response.data
+
+                    let arreglopaginado = [];
+                    for (let i = 0; i < respuesta.length; i += 10) {
+                        let division = respuesta.slice(i, i + 10);
+                        arreglopaginado.push(division);
+                    }
+                    dispatch({ type: GET_FROM, payload: arreglopaginado[id] })
+                })
+        }
+       
+    
+    }
+    if (string === "Api") {
+        
+        return async (dispatch) => {
+            await axios.get('http://localhost:3001/apisort')
+                .then((responsed) => {
+                    var respuesta2 = responsed.data
+
+                    let arreglopaginado = [];
+                    for (let i = 0; i < respuesta2.length; i += 10) {
+                        let division = respuesta2.slice(i, i + 10);
+                        arreglopaginado.push(division);
+                    }
+
+                    dispatch({ type: GET_FROM, payload: arreglopaginado[id] })
+                })
+        }
+    }
+}
+export const getTemperamentFilter = (string)=>{
+
 }

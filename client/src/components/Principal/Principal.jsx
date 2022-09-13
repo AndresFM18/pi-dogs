@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getPaginatedDogs, alphabeticOrder, searchBar, } from '../../redux/actions';
+import { getPaginatedDogs, alphabeticOrder, searchBar, getFrom, getAllTemperaments } from '../../redux/actions';
 import DogCard from '../DogCard/DogCard.jsx';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,11 +24,14 @@ const Principal = () => {
     let apoyopaginado = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     let url = (ids) => { return 'http://localhost:3000/home/' + ids }
     const { id } = useParams()
+    const dbonly = 'Database'
+    const apionly = 'Api'
     const dispatch = useDispatch();
     const dogs = useSelector((state) => state.dogs)
-    const dogSort = useSelector((state)=>state.dogsSort)
+    const temperamental = useSelector((state) =>state.temperament)
     useEffect(() => {
         dispatch(getPaginatedDogs(id))
+        dispatch(getAllTemperaments())
     }, [])
 
     return (
@@ -46,7 +49,9 @@ const Principal = () => {
                 <h3>Filtros:</h3>
                 <button onClick={() => { dispatch(alphabeticOrder(dogs)) }} name='Alfabetico_Filter'>Alfabetico</button>
                 <button onClick={() => { dispatch(getPaginatedDogs(id)) }} name='Delete_Filter'> Quitar Filtros</button>
-                {/* FALTA FILTRADO POR PESO, BASE/API Y TEMPERAMENTOS
+                <button onClick={()=>{dispatch(getFrom(dbonly,id))}}> Database Only</button>
+                <button onClick={() =>{dispatch(getFrom(apionly,id))}}>Api only</button>
+                {/* FALTA FILTRADO POR PESO, BASE/API Y TEMPERAMENTOS Y VALIDACION DE NOLETRAS EN LOS INPUTS DE CREACION Y CSS
                  <button onClick={() => { dispatch(healthOrder(recipes)) }} name='Health_Filter'>Health Score</button> */}
  
             </div>
@@ -58,7 +63,7 @@ const Principal = () => {
             </div>
 
            
-            {dogs ? dogs.map((x)=>{ return  <DogCard id={x.id} nombre={x.nombre} altura={x.altura} peso={x.peso} edad={x.edad} temperamentos={x.temperamentos} imagen={x.imagen}/>  }) : null}
+            {dogs ? dogs.map((x)=>{ return  <DogCard id={x.id} nombre={x.nombre} altura={x.altura} peso={x.peso} edad={x.edad} temperamentos={x.temperamentos} imagen={x.imagen} alttemperamentos={x.alttemperamentos}/>  }) : null}
            
           
             

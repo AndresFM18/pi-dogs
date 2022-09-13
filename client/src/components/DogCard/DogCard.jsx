@@ -18,8 +18,11 @@ const DogCard = (props) => {
 
             <h4>Temperamentos:</h4>
             <ul>
-                {props.temperamentos ? props.temperamentos.map((x) => { return <li>{x.nombre}</li> }) : <p>No hay Temperamentos</p>}
+                {props.temperamentos ? props.temperamentos.map((x) => { return <li>{x.nombre}</li> }) : null}
             </ul>
+            
+                {props.alttemperamentos? <p>{props.alttemperamentos}</p>:null}
+            
 
         </div>
     )

@@ -21,6 +21,7 @@ function CreateRecipe() {
         altura2: '',
         edad1: '',
         edad2: '',
+        imagen: '',
         temperamento: [],
 
     })
@@ -117,6 +118,10 @@ function CreateRecipe() {
         setInput({ ...input, temperamento: input.temperamento.filter((param) => param !== el) })
     }
 
+    function imagenValidator(e){
+        setInput({...input, imagen:e.target.value})
+    }
+
 
 
     let verdadAbsoluta = (errors) => {
@@ -140,6 +145,7 @@ function CreateRecipe() {
                     altura2: input.altura2,
                     peso1: input.peso1,
                     peso2: input.peso2,
+                    imagen:input.imagen,
                     temperamento: input.temperamento
                 })
                 if (res2.data === 'Se ha creado la Raza correctamente') {
@@ -151,6 +157,7 @@ function CreateRecipe() {
                         altura2: '',
                         edad1: '',
                         edad2: '',
+                        imagen:'',
                         temperamento: []
                     })
                     return setMessage("Raza creada2 correctamente");
@@ -169,7 +176,8 @@ function CreateRecipe() {
                 altura1: input.altura1,
                 altura2: input.altura2,
                 peso1: input.peso1,
-                peso2: input.peso2
+                peso2: input.peso2,
+                imagen: input.imagen
             });
             if (res.data === "llave duplicada viola restricción de unicidad «razas_nombre_key2»") {
                 return setMessage('Esta raza ya existe');
@@ -183,6 +191,7 @@ function CreateRecipe() {
                     altura2: '',
                     edad1: '',
                     edad2: '',
+                    imagen:'',
                     temperamento: []
                 })
                 setMessage("Raza creada correctamente");
@@ -262,6 +271,11 @@ function CreateRecipe() {
                             value={input.edad2}
                             placeholder='Introduzca la edad minima aproximada de su Raza...'
                             onChange={(e) => { edadValidator2(e) }}
+                        />
+                        <input type="text"
+                        value={input.imagen}
+                        placeholder='Introduzca la URL de la imagen'
+                        onChange={(e)=>{imagenValidator(e)}}                        
                         />
 
                         <label>Temperamentos: </label>

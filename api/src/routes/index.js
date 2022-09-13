@@ -4,26 +4,28 @@ require("dotenv").config();
 const { API_KEY } = process.env;
 const { Temperamento, Raza, Raza_Temp } = require('../db');
 const {Op} = require('sequelize')
+const urlbase = "https://cdn2.thedogapi.com/images/"
 // Importar todos los routers;
 // Ejemplo: const authRouter = require('./auth.js');
 const router = Router();
 
 router.get('/dogs', async function (req, res) {
-    const nombre = req.query.nombre;
+    const nombres = req.query.nombres;
     let respuesta = [];
     const existen = await Raza.findByPk(1);
 
-    if (nombre) {
-        await axios.get(`https://api.thedogapi.com/v1/breeds/search?q=${nombre}&apiKey=${API_KEY}`)
+    if (nombres) {   
+        await axios.get(`https://api.thedogapi.com/v1/breeds/search?q=${nombres}&apiKey=${API_KEY}`)
             .then((response) => { respuesta = response.data })
             .then(() => {
                 if (respuesta[0] == undefined) {
                     return res.send('no hay resultados para la busqueda')
                 } else {
-                    let arreglo = respuesta.map((x) => { return { id: x.id, nombre: x.name, temperamento: x.temperament, peso: x.weight.metric, imagen: x.reference_image_id } })
+                    let arreglo = respuesta.map((x) => { return { id: x.id, nombre: x.name, peso: x.weight.metric, imagen:`${urlbase}${x.reference_image_id}.jpg`, alttemperamentos:x.temperament, altura:x.height.metric, edad:x.life_span } })
                     return res.send(arreglo)
                 }
             })
+            return "xd"
     }
 
     if (existen) {
@@ -31,7 +33,7 @@ router.get('/dogs', async function (req, res) {
              await Raza.findAll({include: Temperamento})
             .then((razas) => { return res.send(razas) })
         } catch (error) {
-          console.log(error.message)  
+         return res.send(error.message)  
         }
        
     } else {
@@ -80,7 +82,7 @@ router.get('/dogs', async function (req, res) {
             })
 
         } catch (error) {
-            console.log(error.message)
+            return res.send(error.message)
         }
        
     }
@@ -145,7 +147,7 @@ router.get('/dogs/:id', async function (req, res) {
 
 router.post('/dogs', async function (req, res) {
 
-    const { nombre, peso1, peso2, altura1, altura2, edad1, edad2 } = req.body;
+    const { nombre, peso1, peso2, altura1, altura2, edad1, edad2, imagen} = req.body;
 
     let peso = `${peso1} - ${peso2}`
     let altura = `${altura1} - ${altura2}`
@@ -179,7 +181,8 @@ router.post('/dogs', async function (req, res) {
             nombre: nombre,
             altura: altura,
             peso: peso,
-            edad: edad
+            edad: edad,
+            imagen: imagen
         })
             .then((creacion) => {
                 if (creacion) {
@@ -227,7 +230,7 @@ router.get('/temperaments', async function (req, res) {
 
 router.post("/dogs2", async function (req, res) {
 
-    const { nombre, peso1, peso2, temperamento, altura1, altura2, edad2, edad1 } = req.body;
+    const { imagen,nombre, peso1, peso2, temperamento, altura1, altura2, edad2, edad1 } = req.body;
 
     let peso = `${peso1} - ${peso2}`
     let altura = `${altura1} - ${altura2}`
@@ -263,6 +266,7 @@ router.post("/dogs2", async function (req, res) {
             altura: altura,
             peso: peso,
             edad: edad,
+            imagen:imagen
         });
 
         let tempi = [];
@@ -310,6 +314,17 @@ router.get('/apicall/:length', async function (req, res) {
     } catch (error) {
         return res.send(error.message)
     }
+})
+
+router.get('/apisort', async function(req,res){
+try {
+    await Raza.findAll({where:{id:{[Op.lt]: 200}}, include: Temperamento})
+    .then((response)=>{
+        return res.send(response)
+    })
+} catch (error) {
+    return res.send(error.message)
+}
 })
 // Configurar los routers
 // Ejemplo: router.use('/auth', authRouter);
