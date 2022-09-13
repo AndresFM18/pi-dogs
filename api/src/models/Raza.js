@@ -25,6 +25,10 @@ module.exports = (sequelize) => {
     edad:{
       type: DataTypes.STRING,
       allowNull: false
+    },
+    imagen:{
+      type:DataTypes.STRING,
+      allowNull:true
     }
 
   },{timestamps:false});

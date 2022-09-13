@@ -28,7 +28,7 @@ const Principal = () => {
     const dogs = useSelector((state) => state.dogs)
     const dogSort = useSelector((state)=>state.dogsSort)
     useEffect(() => {
-        // dispatch(getPaginatedDogs(id))
+        dispatch(getPaginatedDogs(id))
     }, [])
 
     return (
@@ -40,12 +40,13 @@ const Principal = () => {
              <div className='Modifiers'>
                 
                     <input className='search' value={nombre} placeholder='Ingrese un nombre de una raza' onChange={(e)=>{nameValidator(e)}} type="text" name='SearchBar' />
-                    <button className='boton' disabled={errors.name && 'true'} onClick={()=>{(dispatch(searchBar(nombre)))}} name='SearchBar_Button'>Buscar</button>
+                    <button className='boton' disabled={errors.name && 'true'} onClick={()=>{(dispatch(searchBar(nombre,dogs)))}} name='SearchBar_Button'>Buscar</button>
                     <div className="message-error">{errors ? <p>{errors.name}</p> : null} </div>
                    
                 <h3>Filtros:</h3>
-                <button onClick={() => { dispatch(alphabeticOrder(dogSort)) }} name='Alfabetico_Filter'>Alfabetico</button>
-                {/* FALTA FILTRADO POR PESO, BASE Y TEMPERAMENTOS
+                <button onClick={() => { dispatch(alphabeticOrder(dogs)) }} name='Alfabetico_Filter'>Alfabetico</button>
+                <button onClick={() => { dispatch(getPaginatedDogs(id)) }} name='Delete_Filter'> Quitar Filtros</button>
+                {/* FALTA FILTRADO POR PESO, BASE/API Y TEMPERAMENTOS
                  <button onClick={() => { dispatch(healthOrder(recipes)) }} name='Health_Filter'>Health Score</button> */}
  
             </div>
@@ -55,9 +56,10 @@ const Principal = () => {
                 </ul>
               
             </div>
-            <h1>Razas:</h1>
-            {dogs ? dogs.map((x)=>{ return <DogCard id={x.id} nombre={x.nombre} altura={x.altura} peso={x.peso} edad={x.edad} temperamentos={x.temperamentos}/>}) : null}
-             {/* {dogSort ? dogSort.map(x => { return <DogCard nombre={x.name} id={x.id} temperamentos={x.temperament} /> }) :dogs.map((x)=>{return <DogCard nombre={x.name} id={x.id} temperamentos={x.temperament} />})}    */}
+
+           
+            {dogs ? dogs.map((x)=>{ return  <DogCard id={x.id} nombre={x.nombre} altura={x.altura} peso={x.peso} edad={x.edad} temperamentos={x.temperamentos} imagen={x.imagen}/>  }) : null}
+           
           
             
             <div className='menu-grande2'>

@@ -49,7 +49,8 @@ router.get('/dogs', async function (req, res) {
                     nombre: respuesta[i].name,
                     altura: respuesta[i].height.metric,
                     peso: respuesta[i].weight.metric,
-                    edad: respuesta[i].life_span
+                    edad: respuesta[i].life_span,
+                    imagen: respuesta[i].image.url
                   })
                   var desorden = respuesta[i].temperament
                   if(desorden === undefined){

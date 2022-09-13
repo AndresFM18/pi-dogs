@@ -51,12 +51,14 @@ export const getPaginatedDogs = (id) => {
                         altura: x.altura,
                         peso: x.peso,
                         edad: x.edad,
-                        temperamentos: x.temperamentos
+                        temperamentos: x.temperamentos,
+                        imagen:"NoIMG"
+                        
                     })
                 })
             })
 
-        await axios.get(`http://localhost:3001/apicall/${100 - arreglodb.length}`)
+        await axios.get(`http://localhost:3001/apicall/${150 - arreglodb.length}`)
             .then((response) => {
                 var respuesta = response.data
                 respuesta.forEach((x) => {
@@ -66,7 +68,8 @@ export const getPaginatedDogs = (id) => {
                         altura: x.altura,
                         peso: x.peso,
                         edad: x.edad,
-                        temperamentos: x.temperamentos
+                        temperamentos: x.temperamentos,
+                        imagen: x.imagen
                     })
 
                 })
@@ -74,7 +77,6 @@ export const getPaginatedDogs = (id) => {
 
         let arraydefinitivo = arreglodb.concat(arregloapi)
         let arreglopaginado = [];
-
         for (let i = 0; i < arraydefinitivo.length; i += 10) {
             let division = arraydefinitivo.slice(i, i + 10);
             arreglopaginado.push(division);
@@ -97,11 +99,14 @@ export const alphabeticOrder = (array) => {
     }
 }
 
-export const searchBar = (nombre) => {
+export const searchBar = (nombre,array) => {
     return async (dispatch) => {
         await axios.get(`http://localhost:3001/dogs?nombre=${nombre}`)
             .then((response) => {
                 var respuesta = response.data
+                if(typeof respuesta === "string"){
+                    return dispatch({ type:SEARCH_BAR, payload:array})
+                }
                 dispatch({ type: SEARCH_BAR, payload: respuesta })
             })
     }

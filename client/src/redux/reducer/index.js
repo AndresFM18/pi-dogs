@@ -20,10 +20,10 @@ switch (action.type){
                     return {...state, dogs:[...action.payload], dogsSort:[]}
 
                     case ALPHABETIC_ORDER:
-                        return {...state, dogsSort:[...action.payload] , dogs:[]}
+                        return {...state, dogs:[...action.payload]}
 
                         case SEARCH_BAR:
-                                return{...state, dogsSort:[...action.payload], dogs:[]}
+                                return{...state, dogs:[...action.payload]}
 
         default:
             return{

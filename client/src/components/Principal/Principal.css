@@ -67,3 +67,13 @@ a{
     color: rgb(74, 44, 206);
    
 }
+
+.prueba{
+    flex-direction: row;
+}
+
+.message-error {
+    font-size: 1.2em;
+    text-align: center;
+    color: #f10202;
+  }

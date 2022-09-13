@@ -1,5 +1,5 @@
 .container{
-    height: 550px;
+    height: 850px;
     width: 370px;
     position: relative;
    left:500px;
@@ -10,3 +10,8 @@
 
 h3.cursiv {font-family: cursive;}
 p.cursiv {font-family: cursive;}
+
+.image{
+    width:80%;
+    height:40%;
+}
