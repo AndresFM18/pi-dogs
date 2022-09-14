@@ -115,8 +115,8 @@ export const searchBar = (nombre, array) => {
 }
 export const getFrom = (string, id) => {
     if (string === "Database") {
-      
-                return async (dispatch) => {
+
+        return async (dispatch) => {
             await axios.get('http://localhost:3001/database')
                 .then((response) => {
                     var respuesta = response.data
@@ -126,14 +126,20 @@ export const getFrom = (string, id) => {
                         let division = respuesta.slice(i, i + 10);
                         arreglopaginado.push(division);
                     }
-                    dispatch({ type: GET_FROM, payload: arreglopaginado[id] })
+
+                    if (arreglopaginado[id] === undefined) {
+                        dispatch({ type: GET_FROM, payload: arreglopaginado[0] })
+                    } else {
+                        dispatch({ type: GET_FROM, payload: arreglopaginado[id] })
+                    }
+
                 })
         }
-       
-    
+
+
     }
     if (string === "Api") {
-        
+
         return async (dispatch) => {
             await axios.get('http://localhost:3001/apisort')
                 .then((responsed) => {
@@ -150,6 +156,21 @@ export const getFrom = (string, id) => {
         }
     }
 }
-export const getTemperamentFilter = (string)=>{
+export const getTemperamentFilter = (string) => {
+    return async (dispatch) => {
+        await axios.get('http://localhost:3001/dogs')
+            .then((respuesta) => {
+                var todosperros = respuesta.data
+                let filtrado = [];
+                todosperros.forEach((dog) => {
+                    for (let i = 0; i < dog.temperamentos.length; i++) {
+                        if(dog.temperamentos[i].nombre === string)
+                        filtrado.push(dog)
+                    }
+                }
 
+                )
+                dispatch({ type:GET_TEMPERAMENT_FILTER, payload:filtrado})
+            })
+    }
 }

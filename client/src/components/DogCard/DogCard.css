@@ -6,6 +6,7 @@
    border:color #000000;
    border-width: 1px;
    border-style: solid;
+   background: #ffe5e5;
 }
 
 h3.cursiv {font-family: cursive;}
@@ -15,3 +16,17 @@ p.cursiv {font-family: cursive;}
     width:80%;
     height:40%;
 }
+ol {
+    background: #ff9999;
+    padding: 20px;
+  }
+  
+  ol li {
+    background: #ffe5e5;
+    color: darkred;
+    padding: 5px;
+    margin-left: 35px;
+  }
+  h1 {
+    text-shadow: 2px 2px 5px red;
+  }

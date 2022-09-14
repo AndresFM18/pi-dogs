@@ -30,6 +30,7 @@ function CreateRecipe() {
     const noNumbers = /^([^0-9]*)$/
     const Numbers = /^[0-9]*$/
 
+
     useEffect(() => {
         dispatch(getAllTemperaments());
     }, []);
@@ -51,60 +52,63 @@ function CreateRecipe() {
 
     function pesoValidator1(e) {
         setInput({ ...input, peso1: e.target.value });
-        // let pes1 = Number(input.peso1);
-        // let pes2 = Number(input.peso2);
-        // if (pes1 > pes2){
-        //     setErrors({ ...errors, pesot: 'El peso minimo no puede ser mayor que el peso maximo' })
-        // } else {
-        //     setErrors({ ...errors, pesot: '' })
-        // }
+        if (Numbers.test(e.target.value)) {
+            setErrors({ ...errors, peso1: '' })
+        }
+        else {
+            setErrors({ ...errors, peso1: 'El peso no puede contener letras' })
+        }
+
     }
     function pesoValidator2(e) {
         setInput({ ...input, peso2: e.target.value });
-        // let pes1 = Number(input.peso1);
-        // let pes2 = Number(input.peso2);
-        // if (pes1 > pes2){
-        //     setErrors({ ...errors, pesot: 'El peso minimo no puede ser mayor que el peso maximo' })
-        // } else {
-        //     setErrors({ ...errors, pesot: '' })
-        // }
+        if (Numbers.test(e.target.value)) {
+            setErrors({ ...errors, peso2: '' })
+        }
+        else {
+            setErrors({ ...errors, peso2: 'La altura no puede contener letras' })
+        }
     }
 
     function alturaValidator1(e) {
         setInput({ ...input, altura1: e.target.value });
-        // if (Numbers.test(e.target.value)) {
-        //     setErrors({ ...errors, altura: '' })
-        // } else {
-        //     setErrors({ ...errors, altura: 'La altura debe ser un numero' })
-        // }
+        if (Numbers.test(e.target.value)) {
+            setErrors({ ...errors, altura1: '' })
+        }
+        else {
+            setErrors({ ...errors, altura1: 'La altura no puede contener letras' })
+        }
     }
 
     function alturaValidator2(e) {
         setInput({ ...input, altura2: e.target.value });
-        // if (Numbers.test(e.target.value)) {
-        //     setErrors({ ...errors, altura: '' })
-        // } else {
-        //     setErrors({ ...errors, altura: 'La altura debe ser un numero' })
-        // }
+        if (Numbers.test(e.target.value)) {
+            setErrors({ ...errors, altura2: '' })
+        }
+        else {
+            setErrors({ ...errors, altura2: 'La altura no puede contener letras' })
+        }
     }
 
 
     function edadValidator1(e) {
         setInput({ ...input, edad1: e.target.value });
-        // if (Numbers.test(e.target.value)) {
-        //     setErrors({ ...errors, edad: '' })
-        // } else {
-        //     setErrors({ ...errors, edad: 'La edad debe ser un numero' })
-        // }
+        if (Numbers.test(e.target.value)) {
+            setErrors({ ...errors, edad1: '' })
+        }
+        else {
+            setErrors({ ...errors, edad1: 'La edad no puede contener letras' })
+        }
     }
 
     function edadValidator2(e) {
         setInput({ ...input, edad2: e.target.value });
-        // if (Numbers.test(e.target.value)) {
-        //     setErrors({ ...errors, edad: '' })
-        // } else {
-        //     setErrors({ ...errors, edad: 'La edad debe ser un numero' })
-        // }
+        if (Numbers.test(e.target.value)) {
+            setErrors({ ...errors, edad2: '' })
+        }
+        else {
+            setErrors({ ...errors, edad2: 'La edad no puede contener letras' })
+        }
     }
     function temperamentosValidator(e) {
         if (e.target.value === "all") {
@@ -118,14 +122,14 @@ function CreateRecipe() {
         setInput({ ...input, temperamento: input.temperamento.filter((param) => param !== el) })
     }
 
-    function imagenValidator(e){
-        setInput({...input, imagen:e.target.value})
+    function imagenValidator(e) {
+        setInput({ ...input, imagen: e.target.value })
     }
 
 
 
     let verdadAbsoluta = (errors) => {
-        if (errors.nombre || errors.peso1 || errors.altura || errors.edad) {
+        if (errors.nombre || errors.peso1 || errors.altura1 || errors.edad1 || errors.peso2 || errors.altura2|| errors.edad2) {
             return true
         } else { return false }
     }
@@ -145,7 +149,7 @@ function CreateRecipe() {
                     altura2: input.altura2,
                     peso1: input.peso1,
                     peso2: input.peso2,
-                    imagen:input.imagen,
+                    imagen: input.imagen,
                     temperamento: input.temperamento
                 })
                 if (res2.data === 'Se ha creado la Raza correctamente') {
@@ -157,10 +161,10 @@ function CreateRecipe() {
                         altura2: '',
                         edad1: '',
                         edad2: '',
-                        imagen:'',
+                        imagen: '',
                         temperamento: []
                     })
-                    return setMessage("Raza creada2 correctamente");
+                    return setMessage("Raza creada correctamente");
 
                 } else {
                     return setMessage("Algo muy malo ocurrio")
@@ -191,7 +195,7 @@ function CreateRecipe() {
                     altura2: '',
                     edad1: '',
                     edad2: '',
-                    imagen:'',
+                    imagen: '',
                     temperamento: []
                 })
                 setMessage("Raza creada correctamente");
@@ -238,11 +242,14 @@ function CreateRecipe() {
                             placeholder='Ingrese el peso minimo de su Raza...'
                             onChange={(e) => { pesoValidator1(e) }}
                         />
+                        <div className="message-error">{errors ? <p>{errors.peso1}</p> : null} </div>
+
                         <input type="number"
                             value={input.peso2}
                             placeholder='Ingrese el peso maximo de su Raza...'
                             onChange={(e) => { pesoValidator2(e) }}
                         />
+                         <div className="message-error">{errors ? <p>{errors.peso2}</p> : null} </div>
 
                         <div className="message-error">{errors.pesot ? <p>{errors.pesot}</p> : null} </div>
                         <label>Altura (m)</label>
@@ -252,13 +259,14 @@ function CreateRecipe() {
                             placeholder='Ingrese la altura minima de su Raza'
                             onChange={(e) => { alturaValidator1(e) }}
                         />
+                         <div className="message-error">{errors ? <p>{errors.altura1}</p> : null} </div>
 
                         <input type="number"
                             value={input.altura2}
                             placeholder='Ingrese la altura maxima de su Raza'
                             onChange={(e) => { alturaValidator2(e) }}
                         />
-
+ <div className="message-error">{errors ? <p>{errors.altura2}</p> : null} </div>
                         <div className="message-error">{errors ? <p>{errors.altura}</p> : null} </div>
                         <label>Edad</label>
 
@@ -267,15 +275,19 @@ function CreateRecipe() {
                             placeholder='Introduzca la edad minima aproximada de su Raza...'
                             onChange={(e) => { edadValidator1(e) }}
                         />
+                         <div className="message-error">{errors ? <p>{errors.edad1}</p> : null} </div>
                         <input type="number"
                             value={input.edad2}
-                            placeholder='Introduzca la edad minima aproximada de su Raza...'
+                            placeholder='Introduzca la edad maxima aproximada de su Raza...'
                             onChange={(e) => { edadValidator2(e) }}
                         />
+                         <div className="message-error">{errors ? <p>{errors.edad2}</p> : null} </div>
+
+<label >URL de la imagen</label>
                         <input type="text"
-                        value={input.imagen}
-                        placeholder='Introduzca la URL de la imagen'
-                        onChange={(e)=>{imagenValidator(e)}}                        
+                            value={input.imagen}
+                            placeholder='Introduzca la URL de la imagen'
+                            onChange={(e) => { imagenValidator(e) }}
                         />
 
                         <label>Temperamentos: </label>

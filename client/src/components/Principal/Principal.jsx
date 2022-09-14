@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getPaginatedDogs, alphabeticOrder, searchBar, getFrom, getAllTemperaments } from '../../redux/actions';
+import { getTemperamentFilter, getPaginatedDogs, alphabeticOrder, searchBar, getFrom, getAllTemperaments } from '../../redux/actions';
 import DogCard from '../DogCard/DogCard.jsx';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -47,11 +47,21 @@ const Principal = () => {
                     <div className="message-error">{errors ? <p>{errors.name}</p> : null} </div>
                    
                 <h3>Filtros:</h3>
-                <button onClick={() => { dispatch(alphabeticOrder(dogs)) }} name='Alfabetico_Filter'>Alfabetico</button>
-                <button onClick={() => { dispatch(getPaginatedDogs(id)) }} name='Delete_Filter'> Quitar Filtros</button>
-                <button onClick={()=>{dispatch(getFrom(dbonly,id))}}> Database Only</button>
-                <button onClick={() =>{dispatch(getFrom(apionly,id))}}>Api only</button>
-                {/* FALTA FILTRADO POR PESO, BASE/API Y TEMPERAMENTOS Y VALIDACION DE NOLETRAS EN LOS INPUTS DE CREACION Y CSS
+                <button className='boton_personalizado' onClick={() => { dispatch(alphabeticOrder(dogs)) }} name='Alfabetico_Filter'>Alfabetico</button>
+                <button className='boton_personalizado' onClick={() => { dispatch(getPaginatedDogs(id)) }} name='Delete_Filter'> Quitar Filtros</button>
+                <button className='boton_personalizado' onClick={()=>{dispatch(getFrom(dbonly,id))}}> Database Only</button>
+                <button className='boton_personalizado' onClick={() =>{dispatch(getFrom(apionly,id))}}>Api only</button>
+                {/* <select onChange={(e) => { dispatch(getTemperamentFilter(e.target.value))}}> */}
+                <select className='options' onChange={(e) => { dispatch(getTemperamentFilter(e.target.value))}}>
+                            <option value="all">All</option>
+                            {temperamental ? temperamental.map((x) => {
+                                return (
+                                    <option key={x.id} value={x.nombre}>
+                                        {x.nombre}
+                                    </option>)
+                            }) : null}
+                        </select>
+                {/* FALTA FILTRADO POR PESO, Y TEMPERAMENTOS Y VALIDACION DE NOLETRAS EN LOS INPUTS DE CREACION Y CSS
                  <button onClick={() => { dispatch(healthOrder(recipes)) }} name='Health_Filter'>Health Score</button> */}
  
             </div>

@@ -40,3 +40,17 @@
     margin-bottom: 10px;
     font-family: 'Arial';
 }
+ol {
+    background: #ff9999;
+    padding: 20px;
+  }
+  
+  ol li {
+    background: #ffe5e5;
+    color: darkred;
+    padding: 5px;
+    margin-left: 35px;
+  }
+  h1 {
+    text-shadow: 2px 2px 5px red;
+  }

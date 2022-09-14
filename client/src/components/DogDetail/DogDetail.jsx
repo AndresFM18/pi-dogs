@@ -31,9 +31,9 @@ const DogDetail = () => {
                             <h3>
                                 Temperamentos:
                             </h3>
-                            <ul>
+                            <ol>
                                 {dog.temperamentos ? dog.temperamentos.map((x) => { return <li>{x.nombre}</li> }) : <p>No hay Temperamentos</p>}
-                            </ul>
+                            </ol>
                             <br />
                             <h3>CARACTERISTICAS:</h3>
                             <p className='cursiv'>id: {dog.id}</p>

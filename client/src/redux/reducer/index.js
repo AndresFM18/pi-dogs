@@ -1,4 +1,4 @@
-import {GET_TEMPERAMENTS, GET_DOGS_ID,ALPHABETIC_ORDER, GET_PAGINATED_DOGS,SEARCH_BAR, GET_FROM} from '../actions';
+import {GET_TEMPERAMENT_FILTER,GET_TEMPERAMENTS, GET_DOGS_ID,ALPHABETIC_ORDER, GET_PAGINATED_DOGS,SEARCH_BAR, GET_FROM} from '../actions';
 
 const initialState = {
     dogs:[],
@@ -26,6 +26,9 @@ switch (action.type){
                                 return{...state, dogs:[...action.payload]}
 
                                 case GET_FROM:
+                                    return{...state, dogs:[...action.payload]}
+
+                                    case GET_TEMPERAMENT_FILTER:
                                     return{...state, dogs:[...action.payload]}
 
         default:
